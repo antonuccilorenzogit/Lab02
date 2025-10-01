@@ -1,6 +1,24 @@
 def carica_da_file(file_path):
     """Carica i libri dal file"""
-    # TODO
+    nome_file= input('Inserisci il nome del file contenente i libri: ')
+
+    class libro:
+        def __init__(self, nome, autore, anno, pagine, sezione):
+            self.nome = n
+            self.autore = a
+            self.anno = an
+            self.pagine = p
+            self.sezione = s
+
+
+    try:
+        infile= input('nome_file','r')
+
+        for riga in infile:
+            riga_letta= riga.rstrip(',')
+
+    except FileNotFoundError:
+        return None
 
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
