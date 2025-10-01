@@ -1,21 +1,20 @@
-def carica_da_file(file_path):
+def carica_da_file(file_path,biblioteca,libri):
     """Carica i libri dal file"""
-    class libro:
-        def __init__(self, nome, autore, anno, pagine):
-            self.nome = nome
-            self.autore = autore
-            self.anno = anno
-            self.pagine = pagine
-
-    class biblioteca:
-        def __init__(self):
-            self.selezioni={}
-
     try:
-        infile= input(file_path,'r')
+        infile= open(file_path,'r')
+        n= infile.readline().strip()
+        for line in infile:
+            libro= line.split(',')
+            libri.append(libro)
 
-        for riga in infile:
-            riga_letta= riga.split(',')
+        for n_sez in range(1,int(n)+1):
+            if n_sez not in biblioteca.keys():
+                biblioteca[n_sez]=[]
+            for libro in libri:
+                if int(libro[-1]) ==n_sez:
+                    biblioteca[n_sez].append(libro)
+        infile.close()
+        return biblioteca
 
     except FileNotFoundError:
         return None
@@ -23,22 +22,48 @@ def carica_da_file(file_path):
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
-    # TODO
+
+    try:
+        if sezione in biblioteca.keys():
+            for libro in biblioteca[sezione]:
+                if titolo == libro[0]:
+                    return None
+            biblioteca[sezione].append([titolo,autore,anno,pagine,sezione])
+            infile= open(file_path,'a')
+            infile.write(f'{titolo},{autore},{anno},{pagine},{sezione}\n')
+            infile.close()
+            return True
+        else:
+            return None
+    except FileNotFoundError:
+            return None
 
 
-def cerca_libro(biblioteca, titolo):
-    """Cerca un libro nella biblioteca dato il titolo"""
-    # TODO
+def cerca_libro(biblioteca, titolo,):
+    Trovato= False
+    for chiave in biblioteca.keys().list():
+        for n in range(len(biblioteca[chiave])):
+            if titolo == biblioteca[chiave][n][0]:
+                return [biblioteca[chiave][n][0],biblioteca[chiave][n][1],biblioteca[chiave][n][2],biblioteca[chiave][n][3], chiave]
+                Trovato= True
+                break
+
+    if not Trovato:
+        return None
 
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
-    """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
-    # TODO
-
+    if sezione not in biblioteca.keys():
+        return None
+    else:
+        return sorted(biblioteca[sezione],key=lambda x: x[0])
 
 def main():
-    biblioteca = []
+
     file_path = "biblioteca.csv"
+
+    biblioteca = {}
+    libri = []
 
     while True:
         print("\n--- MENU BIBLIOTECA ---")
@@ -53,7 +78,7 @@ def main():
         if scelta == "1":
             while True:
                 file_path = input("Inserisci il path del file da caricare: ").strip()
-                biblioteca = carica_da_file(file_path)
+                biblioteca = carica_da_file(file_path,biblioteca,libri)
                 if biblioteca is not None:
                     break
 
