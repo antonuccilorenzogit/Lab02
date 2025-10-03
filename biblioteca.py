@@ -4,7 +4,7 @@ def carica_da_file(file_path,biblioteca,libri):
         infile= open(file_path,'r')
         n= infile.readline().strip()
         for line in infile:
-            libro= line.split(',')
+            libro= line.rstrip('\n').split(',')
             libri.append(libro)
 
         for n_sez in range(1,int(n)+1):
@@ -41,7 +41,7 @@ def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path)
 
 def cerca_libro(biblioteca, titolo,):
     Trovato= False
-    for chiave in biblioteca.keys().list():
+    for chiave in biblioteca:
         for n in range(len(biblioteca[chiave])):
             if titolo == biblioteca[chiave][n][0]:
                 return [biblioteca[chiave][n][0],biblioteca[chiave][n][1],biblioteca[chiave][n][2],biblioteca[chiave][n][3], chiave]
